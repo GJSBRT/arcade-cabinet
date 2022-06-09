@@ -1,8 +1,11 @@
 const express = require('express')
 var cors = require('cors')
+var LedMatrix = require("easybotics-rpi-rgb-led-matrix");
 const { exec } = require('child_process');
 
 const app = express();
+var matrix = new LedMatrix(16, 128 );
+
 app.use(cors())
 var info = {};
 
@@ -38,6 +41,13 @@ app.post('/play/:game', (req, res) => {
     }
   });
   return res.json("");
+});
+
+app.post('/display', (req, res) => {
+  matrix.fill(255, 50, 100);
+  matrix.setPixel(0, 0, 0, 50, 255);
+  matrix.update();
+  return res.json("ok");
 });
 
 app.listen(8080, () =>
